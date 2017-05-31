@@ -1,6 +1,8 @@
 package app;
 
+import controller.Controller;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import model.CustomJTableModel;
 
 import javax.swing.*;
@@ -17,6 +19,7 @@ public class MainWindow extends JFrame {
     public static String PC = "PC";
     public static String CG = "CG";
     public static String CPU = "CPU";
+    JTable table;
 
     public MainWindow() throws HeadlessException {
         super();
@@ -39,7 +42,7 @@ public class MainWindow extends JFrame {
         String []categories = {PC,CG,CPU};
         combo = new JComboBox<String>(categories);
         JButton valid = new JButton(new ActionValider("Valider/Actualiser", this)); //TODO ACTIONLISTENER
-
+        valid.addActionListener(e-> Controller.refreshPC((CustomJTableModel)table.getModel()));
 
 
         top.setLayout(new BoxLayout(top,BoxLayout.X_AXIS));
@@ -50,19 +53,10 @@ public class MainWindow extends JFrame {
 
         contentPane.add(top,BorderLayout.NORTH);
 
-        JTable table = new JTable(new CustomJTableModel());
+        table = new JTable(new CustomJTableModel());
+        Controller.refreshPC((CustomJTableModel)table.getModel());
         JScrollPane scrollPane = new JScrollPane(table);
 
-        /*ArrayList<String> s = new ArrayList<>();
-        s.add("un");
-        s.add("deux");
-        s.add("trois");
-
-        ArrayList<Object[]> d = new ArrayList<Object[]>();
-        d.add(new Object[3]);
-
-        ((CustomJTableModel)table.getModel()).setColumnNames(s);
-        ((CustomJTableModel)table.getModel()).setData(d);*/
 
         contentPane.add(scrollPane,BorderLayout.CENTER);
 

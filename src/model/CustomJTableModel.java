@@ -46,6 +46,7 @@ public class CustomJTableModel extends AbstractTableModel{
     }
     public void setData(ArrayList<ArrayList<String>> d){
         data = d;
+        fireTableDataChanged();
     }
 
     public void removeAllColumn(){
@@ -55,6 +56,7 @@ public class CustomJTableModel extends AbstractTableModel{
     }
     public void setColumnNames(ArrayList<String> c){
         columnNames = c;
+        fireTableStructureChanged();
     }
 
     @Override
