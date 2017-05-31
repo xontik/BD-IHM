@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 /**
  * Created by xontik on 31/05/2017.
  */
-public class TclApp {
+public class BarApp {
 
     public static void main (String []args){
         SwingUtilities.invokeLater(new Runnable() {
