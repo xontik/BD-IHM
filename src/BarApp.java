@@ -10,11 +10,7 @@ public class BarApp {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ResultSet rs = BDD.query("Select * from PC");
-                try{
-                while(rs.next()){
-                    System.out.println(rs.getInt(1));
-                }}catch (Exception e){e.printStackTrace();}
+                new MainWindow();
             }
         });
     }
