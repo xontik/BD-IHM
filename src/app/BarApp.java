@@ -1,5 +1,6 @@
+package app;
+
 import javax.swing.*;
-import java.sql.ResultSet;
 
 /**
  * Created by xontik on 31/05/2017.

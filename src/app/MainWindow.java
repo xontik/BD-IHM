@@ -1,3 +1,5 @@
+package app;
+
 import javafx.scene.control.ComboBox;
 
 import javax.swing.*;
@@ -34,7 +36,7 @@ public class MainWindow extends JFrame {
         JLabel labelCombo = new JLabel("Selectionner la section a gerer : ");
         String []categories = {PC,CG,CPU};
         combo = new JComboBox<String>(categories);
-        JButton valid = new JButton("Valider"); //TODO ACTIONLISTENER
+        JButton valid = new JButton(new ActionValider("Valider", this)); //TODO ACTIONLISTENER
         JButton refresh = new JButton("Actualiser"); // TODO ACTIONLISTENER
 
 
