@@ -12,18 +12,21 @@ import java.util.ArrayList;
 public class DAO {
     public static ArrayList<String> getTableColumsName(String table){
         ResultSet rs = BDD.query("SELECT * FROM "+table);
+        return getColumns(rs);
+    }
+    public static ArrayList<String> getColumns(ResultSet rs) {
         ArrayList<String> c;
         try {
             ResultSetMetaData rsmd = rs.getMetaData();
             int columsCount = rsmd.getColumnCount();
             c = new ArrayList<>();
 
-            for(int i =1; i<=columsCount;i++){
+            for (int i = 1; i <= columsCount; i++) {
                 c.add(rsmd.getColumnName(i));
 
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

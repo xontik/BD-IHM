@@ -2,10 +2,9 @@ package controller;
 
 import DAO.DAO;
 import DAO.PC;
-import model.CustomJTableModel;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.TableModel;
+import model.CustomJTableModel;
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -13,8 +12,8 @@ import java.util.ArrayList;
  */
 public class Controller {
     public static void refresh(CustomJTableModel model,String table){
-        ArrayList<ArrayList<String>> data = new ArrayList<>();
-        ArrayList<String> colNames = new ArrayList<>();
+        ArrayList<ArrayList<String>> data;
+        ArrayList<String> colNames;
         if(table=="PC"){
             data = PC.getPcWithJoinedDetail();
             colNames = PC.getColumnsPcWithJoinedDetail();
@@ -26,7 +25,19 @@ public class Controller {
 
         model.setColumnNames(colNames);
         model.setData(data);
+    }
 
-
+    public static void add(String type){
+        JOptionPane.showMessageDialog(null,"Ici fenetre qui pour ajouter : "+type);
+    }
+    public static void delete(String type, int id){
+        JOptionPane.showMessageDialog(null,"Ici fenetre qui pour ajouter : "+type+" "+Integer.toString(id));
+    }
+    public static void edit(String type, ArrayList<String> data){
+        String s = "";
+        for(String d : data){
+            s+=" "+d;
+        }
+        JOptionPane.showMessageDialog(null,"Ici fenetre qui pour ajouter : "+s);
     }
 }

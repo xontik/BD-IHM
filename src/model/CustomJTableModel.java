@@ -28,10 +28,11 @@ public class CustomJTableModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        System.out.println(data.get(rowIndex).get(columnIndex));
         return data.get(rowIndex).get(columnIndex);
     }
-
+    public ArrayList<String> getRow(int index){
+        return data.get(index);
+    }
 
     @Override
     public boolean isCellEditable(int row, int column) {
@@ -39,21 +40,13 @@ public class CustomJTableModel extends AbstractTableModel{
     }
 
 
-    public void removeAllRow(){
-        while(getRowCount()!=0){
-            data.remove(0);
-        }
-    }
+
     public void setData(ArrayList<ArrayList<String>> d){
         data = d;
         fireTableDataChanged();
     }
 
-    public void removeAllColumn(){
-        while(getColumnCount()!=0){
-            columnNames.remove(0);
-        }
-    }
+
     public void setColumnNames(ArrayList<String> c){
         columnNames = c;
         fireTableStructureChanged();
