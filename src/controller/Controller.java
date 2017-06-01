@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.DAO;
 import DAO.PC;
 import model.CustomJTableModel;
 
@@ -11,10 +12,17 @@ import java.util.ArrayList;
  * Created by xontik on 31/05/2017.
  */
 public class Controller {
-    public static void refreshPC(CustomJTableModel model){
-        ArrayList<ArrayList<String>> data = PC.getAllPc();
-        ArrayList<String> colNames = PC.getTableColumsName("PC");
+    public static void refresh(CustomJTableModel model,String table){
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+        ArrayList<String> colNames = new ArrayList<>();
+        if(table=="PC"){
+            data = PC.getPcWithJoinedDetail();
+            colNames = PC.getColumnsPcWithJoinedDetail();
 
+        }else{
+            data = DAO.getAllFromTable(table);
+            colNames = DAO.getTableColumsName(table);
+        }
 
         model.setColumnNames(colNames);
         model.setData(data);

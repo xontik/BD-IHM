@@ -29,4 +29,25 @@ public class DAO {
         }
         return c;
     }
+
+    public static ArrayList<ArrayList<String>> getAllFromTable(String table){
+        ResultSet rs = BDD.query("SELECT * FROM "+table);
+        ArrayList<String> columns = getTableColumsName(table);
+
+        ArrayList<ArrayList<String>> res = new ArrayList<>();
+
+        try{
+            while(rs.next()){
+                ArrayList<String> line =  new ArrayList<>();
+                for(String name:columns) {
+                    line.add(rs.getString(name));
+                }
+                res.add(line);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return res;
+    }
 }
