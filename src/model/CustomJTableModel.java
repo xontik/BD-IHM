@@ -29,6 +29,7 @@ public class CustomJTableModel extends AbstractTableModel{
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return data.get(rowIndex).get(columnIndex);
+
     }
     public ArrayList<String> getRow(int index){
         return data.get(index);

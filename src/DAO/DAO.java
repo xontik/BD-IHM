@@ -4,6 +4,7 @@ import app.BDD;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,13 @@ import java.util.ArrayList;
  */
 public class DAO {
     public static ArrayList<String> getTableColumsName(String table){
-        ResultSet rs = BDD.query("SELECT * FROM "+table);
+
+        ResultSet rs;
+        try{
+            rs = BDD.query("SELECT * FROM "+table);
+        }catch (SQLException e){
+            return null;
+        }
         return getColumns(rs);
     }
     public static ArrayList<String> getColumns(ResultSet rs) {
@@ -34,7 +41,12 @@ public class DAO {
     }
 
     public static ArrayList<ArrayList<String>> getAllFromTable(String table){
-        ResultSet rs = BDD.query("SELECT * FROM "+table);
+        ResultSet rs;
+        try{
+            rs = BDD.query("SELECT * FROM "+table);
+        }catch (SQLException e){
+            return null;
+        }
         ArrayList<String> columns = getTableColumsName(table);
 
         ArrayList<ArrayList<String>> res = new ArrayList<>();

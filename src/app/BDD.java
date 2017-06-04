@@ -29,16 +29,13 @@ public class BDD {
         return c;
     }
 
-    public static ResultSet query(String q){
+    public static ResultSet query(String q) throws SQLException{
         getInstance();
         ResultSet rs;
-        try {
-            Statement stmt = c.createStatement();
-            rs = stmt.executeQuery(q);
-        }catch (Exception e){
-            e.printStackTrace();
-            rs = null;
-        }
+
+        Statement stmt = c.createStatement();
+        rs = stmt.executeQuery(q);
+
         return rs;
 
     }

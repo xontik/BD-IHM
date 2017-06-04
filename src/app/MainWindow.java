@@ -24,9 +24,10 @@ public class MainWindow extends JFrame {
     JButton edit;
     JButton delete;
     JButton refresh;
-    public static String PC = "PC";
-    public static String CG = "CG";
-    public static String CPU = "CPU";
+    Controller ctrl;
+    public static final String PC = "PC";
+    public static final String CG = "CG";
+    public static final String CPU = "CPU";
     JTable table;
 
     public String categorie = PC;
@@ -37,6 +38,8 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(600,300);
+        ctrl = new Controller(table);
+
         setContentPane(makeContentPane());
         listeners();
         setVisible(true);
@@ -66,7 +69,9 @@ public class MainWindow extends JFrame {
         contentPane.add(top,BorderLayout.NORTH);
 
         table = new JTable(new CustomJTableModel());
-        Controller.refresh((CustomJTableModel)table.getModel(),(String)combo.getSelectedItem());
+        ctrl.setTable(categorie);
+        ctrl.setJTable(table);
+        ctrl.refresh();
         JScrollPane scrollPane = new JScrollPane(table);
 
 
@@ -96,12 +101,14 @@ public class MainWindow extends JFrame {
     }
 
     private void listeners(){
-        combo.addActionListener(e-> {Controller.refresh((CustomJTableModel)table.getModel(),categorie); /*edit.setEnabled(false);delete.setEnabled(false);*/});
-        refresh.addActionListener(e-> Controller.refresh((CustomJTableModel)table.getModel(),categorie));
+        combo.addActionListener(e-> {categorie=(String)combo.getSelectedItem();ctrl.setTable(categorie);
+            ctrl.refresh();});
+        refresh.addActionListener(e-> {categorie=(String)combo.getSelectedItem();ctrl.setTable(categorie);
+            ctrl.refresh();});
 
-        add.addActionListener(e -> Controller.add(categorie));
-        edit.addActionListener(e -> Controller.edit(categorie,((CustomJTableModel)table.getModel()).getRow(table.getSelectedRow())));
-        delete.addActionListener(e -> Controller.delete(categorie,Integer.valueOf((String)table.getValueAt(table.getSelectedRow(),0))));
+        add.addActionListener(e -> ctrl.add());
+        edit.addActionListener(e -> ctrl.edit(((CustomJTableModel)table.getModel()).getRow(table.getSelectedRow())));
+        delete.addActionListener(e -> ctrl.delete(Integer.valueOf((String)table.getValueAt(table.getSelectedRow(),0))));
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
