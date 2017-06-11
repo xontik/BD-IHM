@@ -17,7 +17,7 @@ public class PC extends DAO {
     public static ArrayList<ArrayList<String>> getPcWithJoinedDetail() {
         ResultSet rs;
         try {
-            rs = BDD.query("SELECT pc_id,nom,model_cpu,model_cg FROM pc join cg using(cg_id) join cpu using(cpu_id)");
+            rs = BDD.query("SELECT  pc_id,nom,model_cpu,cpu_id,model_cg,cg_id FROM pc join cg using(cg_id) join cpu using(cpu_id)");
         }catch(SQLException e){
             return null;
         }
@@ -52,7 +52,7 @@ public class PC extends DAO {
         ResultSet rs;
 
         try {
-            rs = BDD.query("SELECT pc_id,nom,model_cpu,model_cg FROM pc join cg using(cg_id) join cpu using(cpu_id) order by pc_id asc");
+            rs = BDD.query("SELECT pc_id,nom,model_cpu,cpu_id,model_cg,cg_id FROM pc join cg using(cg_id) join cpu using(cpu_id) order by pc_id asc");
         }catch(SQLException e){
             return null;
         }
@@ -72,6 +72,15 @@ public class PC extends DAO {
     public static boolean add(String nom, int cpu,int cg){
         try{
             BDD.query("{call addToPc('"+nom+"',"+cpu+","+cg+")}");
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    public static boolean edit(String id,String n,String idCPU,String idCG){
+        try{
+            BDD.query("{call editPc("+id+",'"+n+"','"+idCPU+"',"+idCG+")}");
         }catch (SQLException e){
             e.printStackTrace();
             return false;

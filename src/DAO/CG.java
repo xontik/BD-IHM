@@ -41,4 +41,23 @@ public class CG {
         }
         return cpus;
     }
+    public static boolean edit(String id,String b,String m,String p){
+        try{
+            BDD.query("{call editCg("+id+",'"+b+"','"+m+"',"+p+")}");
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    public static String getCgLabel(int id){
+        try{
+            ResultSet rs = BDD.query("SELECT model_cg,brand from cg where cg_id ="+Integer.toString(id));
+            rs.next();
+            return rs.getString("model_cg") + " " + rs.getString("brand");
+        }catch(SQLException e){
+            return null;
+        }
+
+    }
 }

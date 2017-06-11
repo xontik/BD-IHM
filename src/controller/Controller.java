@@ -3,7 +3,10 @@ package controller;
 import DAO.DAO;
 import DAO.PC;
 
+import app.CgDialog;
+import app.CpuDialog;
 import app.MainWindow;
+import app.PcDialog;
 import model.CustomJTableModel;
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +44,6 @@ public class Controller {
             data = DAO.getAllFromTable(table);
             colNames = DAO.getTableColumsName(table);
             System.out.println(table);
-
         }
         CustomJTableModel model = (CustomJTableModel)jtable.getModel();
         model.setColumnNames(colNames);
@@ -52,38 +54,12 @@ public class Controller {
         switch (table) {
             case MainWindow.CPU:{
 
-                JPanel form = new JPanel();
-                form.setLayout(new GridLayout(8,1));
-                JTextField brand = new JTextField();
-                brand.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, brand.getPreferredSize().height) );
-
-                JTextField model = new JTextField();
-                model.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, model.getPreferredSize().height) );
-                JTextField speed = new JTextField();
-                speed.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, speed.getPreferredSize().height) );
-                JTextField core = new JTextField();
-                core.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, core.getPreferredSize().height) );
-
-                form.add(new JLabel("Brand :"));
-                form.add(brand);
-
-                form.add(new JLabel("Model :"));
-                form.add(model);
-
-                form.add(new JLabel("Speed :"));
-                form.add(speed);
-
-                form.add(new JLabel("Core : "));
-                form.add(core);
+                CpuDialog cpuDial = new CpuDialog();
                 //TODO DO WHILE VERIF DATA
-                int result = JOptionPane.showConfirmDialog(null,form,"Ajouter un CPU",JOptionPane.OK_CANCEL_OPTION);
+                int result = cpuDial.getResult();
                 if(result == JOptionPane.YES_OPTION){
 
-                    if(CPU.add(brand.getText(),model.getText(),speed.getText(),core.getText())){
+                    if(CPU.add(cpuDial.getBrand(),cpuDial.getModel(),cpuDial.getSpeed(),cpuDial.getCore())){
                         JOptionPane.showMessageDialog(null, "Le CPU a bien été ajouté !");
                         refresh();
                     }else{
@@ -93,93 +69,32 @@ public class Controller {
 
                 break;}
             case MainWindow.CG: {
-                JPanel form = new JPanel();
-                form.setLayout(new GridLayout(8, 1));
-                JTextField brand = new JTextField();
-                brand.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, brand.getPreferredSize().height));
-
-                JTextField model = new JTextField();
-                model.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, model.getPreferredSize().height));
-                JTextField price = new JTextField();
-                price.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, price.getPreferredSize().height));
-
-                form.add(new JLabel("Brand :"));
-                form.add(brand);
-
-                form.add(new JLabel("Model :"));
-                form.add(model);
-
-                form.add(new JLabel("Price :"));
-                form.add(price);
+                CgDialog cgDialog = new CgDialog();
 
                 //TODO DO WHILE VERIF DATA
-                int result = JOptionPane.showConfirmDialog(null, form, "Ajouter un CPU", JOptionPane.OK_CANCEL_OPTION);
-                if (result == JOptionPane.YES_OPTION) {
+                int result = cgDialog.getResult();
 
-                    if (CG.add(brand.getText(), model.getText(), price.getText())) {
+                if (result == JOptionPane.YES_OPTION) {
+                    if (CG.add(cgDialog.getBrand(), cgDialog.getModel(), cgDialog.getPrice())) {
                         JOptionPane.showMessageDialog(null, "La CG a bien été ajoutée !");
                         refresh();
                     } else {
                         JOptionPane.showMessageDialog(null, "Erreur impossible d'ajouter la CG !");
                     }
                 }
-
                 break;
             }
             case MainWindow.PC: {
 
-                //CPU.getCpusIdNotUsed();
-                HashMap<Integer,String> cgMap = CG.getCgNotUsed();
 
-                Integer[] idCg = new Integer[cgMap.size()];
-                String[] nameCg = new String[cgMap.size()];
-                int index = 0;
-                for (Map.Entry<Integer, String> mapEntry : cgMap.entrySet()) {
-                    idCg[index] = mapEntry.getKey();
-                    nameCg[index] = mapEntry.getValue();
-                    index++;
-                }
-                HashMap<Integer,String> cpuMap = CPU.getCpuNotUsed();
-
-                Integer[] idCpu = new Integer[cpuMap.size()];
-                String[] nameCpu = new String[cpuMap.size()];
-                index = 0;
-                for (Map.Entry<Integer, String> mapEntry : cpuMap.entrySet()) {
-                    idCpu[index] = mapEntry.getKey();
-                    nameCpu[index] = mapEntry.getValue();
-                    index++;
-                }
-
-                JPanel form = new JPanel();
-                form.setLayout(new GridLayout(8, 1));
-                JTextField name = new JTextField();
-                name.setMaximumSize(
-                        new Dimension(Integer.MAX_VALUE, name.getPreferredSize().height));
-
-                JComboBox cpu = new JComboBox(nameCpu);
-
-                JComboBox cg = new JComboBox(nameCg);
-
-
-                form.add(new JLabel("Nom :"));
-                form.add(name);
-
-                form.add(new JLabel("CPU :"));
-                form.add(cpu);
-
-                form.add(new JLabel("CG :"));
-                form.add(cg);
-
+                PcDialog pcDialog = new PcDialog();
                 //TODO DO WHILE VERIF DATA
-                if(cgMap.isEmpty() || cpuMap.isEmpty()){
+                if(!pcDialog.isComponentAvailable()){
                     JOptionPane.showMessageDialog(null, "Erreur : plus de composant disponible!");
                 }else{
-                    int result = JOptionPane.showConfirmDialog(null, form, "Ajouter un PC", JOptionPane.OK_CANCEL_OPTION);
+                    int result = pcDialog.getResult();
                     if (result == JOptionPane.YES_OPTION) {
-                        if (PC.add(name.getText(),idCpu[cpu.getSelectedIndex()],idCg[cg.getSelectedIndex()])) {
+                        if (PC.add(pcDialog.getName(),pcDialog.getIdCpu(),pcDialog.getIdCg())) {
                             JOptionPane.showMessageDialog(null, "Le PC a bien été ajoutée !");
                             refresh();
                         } else {
@@ -190,6 +105,8 @@ public class Controller {
             }
         }
     }
+
+
     public void delete(int id){
         boolean deleted = true;
 
@@ -219,6 +136,61 @@ public class Controller {
         for(String d : data){
             s+=" "+d;
         }
-        JOptionPane.showMessageDialog(null,"Ici fenetre qui pour editer : "+ table +" "+s);
+        //JOptionPane.showMessageDialog(null,"Ici fenetre qui pour editer : "+ table +" "+s);
+
+
+        switch (table) {
+            case MainWindow.CPU:{
+
+                CpuDialog cpuDial = new CpuDialog(data.get(1),data.get(2),data.get(3),data.get(4));
+                //TODO DO WHILE VERIF DATA
+                int result = cpuDial.getResult();
+                if(result == JOptionPane.YES_OPTION){
+
+                    if(CPU.edit(data.get(0),cpuDial.getBrand(),cpuDial.getModel(),cpuDial.getSpeed(),cpuDial.getCore())){
+                        JOptionPane.showMessageDialog(null, "Le CPU a bien été mis a jour !");
+                        refresh();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Erreur impossible d'ajouter le CPU !");
+                    }
+                }
+
+                break;}
+            case MainWindow.CG: {
+                CgDialog cgDialog = new CgDialog(data.get(1),data.get(2),data.get(3));
+
+                //TODO DO WHILE VERIF DATA
+                int result = cgDialog.getResult();
+
+                if (result == JOptionPane.YES_OPTION) {
+                    if (CG.edit(data.get(0),cgDialog.getBrand(), cgDialog.getModel(), cgDialog.getPrice())) {
+                        JOptionPane.showMessageDialog(null, "La CG a bien été mis a jour !");
+                        refresh();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Erreur impossible de mettre a jour la CG !");
+                    }
+                }
+                break;
+            }
+            case MainWindow.PC: {
+
+
+                PcDialog pcDialog = new PcDialog(data.get(1),Integer.valueOf(data.get(3)),Integer.valueOf(data.get(5)));
+                //TODO DO WHILE VERIF DATA
+                if(!pcDialog.isComponentAvailable()){
+                    JOptionPane.showMessageDialog(null, "Erreur : plus de composant disponible!");
+                }else{
+                    int result = pcDialog.getResult();
+                    if (result == JOptionPane.YES_OPTION) {
+                        if (PC.edit(data.get(0),pcDialog.getName(),Integer.toString(pcDialog.getIdCpu()),Integer.toString(pcDialog.getIdCg()))) {
+                            JOptionPane.showMessageDialog(null, "Le PC a bien été mis a jour !");
+                            refresh();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Erreur impossible de mettre a jour le PC !");
+                        }
+                    }
+                }
+            }
+        }
     }
 }

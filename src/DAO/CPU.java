@@ -27,6 +27,26 @@ public class CPU {
         }
         return true;
     }
+    public static boolean edit(String id,String b,String m,String s,String c){
+        try{
+            BDD.query("{call editCpu("+id+",'"+b+"','"+m+"',"+s+","+c+")}");
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public static String getCpuLabel(int id){
+        try{
+            ResultSet rs = BDD.query("SELECT model_cpu,brand from cpu where cpu_id ="+Integer.toString(id));
+            rs.next();
+            return rs.getString("brand") + " " + rs.getString("model_cpu");
+        }catch(SQLException e){
+            return null;
+        }
+
+    }
 
     public static HashMap<Integer,String> getCpuNotUsed() {
         HashMap<Integer, String> cpus = new HashMap<>();
