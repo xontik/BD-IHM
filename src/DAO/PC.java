@@ -69,6 +69,15 @@ public class PC extends DAO {
         return true;
         
     }
+    public static boolean add(String nom, int cpu,int cg){
+        try{
+            BDD.query("{call addToPc('"+nom+"',"+cpu+","+cg+")}");
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
 
 

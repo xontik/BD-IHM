@@ -2,7 +2,9 @@ package DAO;
 
 import app.BDD;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Created by xontik on 31/05/2017.
@@ -24,5 +26,19 @@ public class CPU {
             return false;
         }
         return true;
+    }
+
+    public static HashMap<Integer,String> getCpuNotUsed() {
+        HashMap<Integer, String> cpus = new HashMap<>();
+
+        try {
+            ResultSet rs = BDD.query("SELECT cpu_id,model_cpu,speed from cpu where cpu_id not in(select cpu_id from pc)");
+            while (rs.next()) {
+                cpus.put(rs.getInt("cpu_id"), rs.getString("model_cpu") + " " + rs.getString("speed"));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return cpus;
     }
 }

@@ -3,12 +3,14 @@ package controller;
 import DAO.DAO;
 import DAO.PC;
 
-import app.AddCpuDialog;
 import app.MainWindow;
 import model.CustomJTableModel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import DAO.*;
 
 /**
@@ -128,8 +130,63 @@ public class Controller {
                 break;
             }
             case MainWindow.PC: {
-                JOptionPane.showMessageDialog(null, "Ici fenetre qui pour ajouter : PC");
-                break;
+
+                //CPU.getCpusIdNotUsed();
+                HashMap<Integer,String> cgMap = CG.getCgNotUsed();
+
+                Integer[] idCg = new Integer[cgMap.size()];
+                String[] nameCg = new String[cgMap.size()];
+                int index = 0;
+                for (Map.Entry<Integer, String> mapEntry : cgMap.entrySet()) {
+                    idCg[index] = mapEntry.getKey();
+                    nameCg[index] = mapEntry.getValue();
+                    index++;
+                }
+                HashMap<Integer,String> cpuMap = CPU.getCpuNotUsed();
+
+                Integer[] idCpu = new Integer[cpuMap.size()];
+                String[] nameCpu = new String[cpuMap.size()];
+                index = 0;
+                for (Map.Entry<Integer, String> mapEntry : cpuMap.entrySet()) {
+                    idCpu[index] = mapEntry.getKey();
+                    nameCpu[index] = mapEntry.getValue();
+                    index++;
+                }
+
+                JPanel form = new JPanel();
+                form.setLayout(new GridLayout(8, 1));
+                JTextField name = new JTextField();
+                name.setMaximumSize(
+                        new Dimension(Integer.MAX_VALUE, name.getPreferredSize().height));
+
+                JComboBox cpu = new JComboBox(nameCpu);
+
+                JComboBox cg = new JComboBox(nameCg);
+
+
+                form.add(new JLabel("Nom :"));
+                form.add(name);
+
+                form.add(new JLabel("CPU :"));
+                form.add(cpu);
+
+                form.add(new JLabel("CG :"));
+                form.add(cg);
+
+                //TODO DO WHILE VERIF DATA
+                if(cgMap.isEmpty() || cpuMap.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Erreur : plus de composant disponible!");
+                }else{
+                    int result = JOptionPane.showConfirmDialog(null, form, "Ajouter un PC", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.YES_OPTION) {
+                        if (PC.add(name.getText(),idCpu[cpu.getSelectedIndex()],idCg[cg.getSelectedIndex()])) {
+                            JOptionPane.showMessageDialog(null, "Le PC a bien été ajoutée !");
+                            refresh();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Erreur impossible d'ajouter le PC !");
+                        }
+                    }
+                }
             }
         }
     }

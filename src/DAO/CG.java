@@ -2,7 +2,9 @@ package DAO;
 
 import app.BDD;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Created by xontik on 31/05/2017.
@@ -25,5 +27,18 @@ public class CG {
             return false;
         }
         return true;
+    }
+    public static HashMap<Integer,String> getCgNotUsed() {
+        HashMap<Integer, String> cpus = new HashMap<>();
+
+        try {
+            ResultSet rs = BDD.query("SELECT cg_id,model_cg,brand from cg where cg_id not in(select cg_id from pc)");
+            while (rs.next()) {
+                cpus.put(rs.getInt("cg_id"), rs.getString("model_cg") + " " + rs.getString("brand"));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return cpus;
     }
 }
