@@ -82,8 +82,10 @@ public class PcDialog {
         cpuMap.put(idCpu,currentCpuLabel);
 
 
+
         fillArrays();
         makePanel();
+        name.setText(nom);
 
         cpu.setSelectedIndex(cpuMap.size()-1);
         cg.setSelectedIndex(cgMap.size()-1);
